@@ -1,0 +1,3 @@
+Kind: a, name: aa, age: 12, sex: male, price: 1000.000000
+Kind: b, name: bb, age: 6, sex: female, price: 2000.000000
+Kind: c, name: cc, age: 20, sex: male, price: 3000.000000
