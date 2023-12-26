@@ -13,12 +13,14 @@
 
 #include"ZooMagazine.h"
 
-enum Actions { EXIT, ADD_ANIMAL, SHOW_MAGAZINE, SAVE, LOAD };
+enum Actions { EXIT, ADD_ANIMAL, DELETE_ANIMAL, SHOW_MAGAZINE, SAVE, LOAD, ACTIONS_SIZE };
 
 int menu();
 Animal enterAnimalInfo();
 void saveToFile(std::fstream& file, const std::string& path, const ZooMagazine& zm);
 void loadFromFile(std::fstream& file, const std::string& path, ZooMagazine& zm);
+void printMagazine(const ZooMagazine& zm);
+void deleteAnimal(ZooMagazine& zm);
 
 int main()
 {
@@ -38,8 +40,11 @@ int main()
 		case Actions::ADD_ANIMAL:
 			zm.addAnimal(enterAnimalInfo());
 			break;
+		case Actions::DELETE_ANIMAL:
+			deleteAnimal(zm);
+			break;
 		case Actions::SHOW_MAGAZINE:
-			std::cout << '\n' << zm << std::endl;
+			printMagazine(zm);
 			break;
 		case Actions::SAVE:
 			saveToFile(file, path, zm);
@@ -76,11 +81,11 @@ T checkInput(const std::string& output)
 
 int menu()
 {
-	std::string output{"To add new animal - 1,\nto show magazine - 2,\nto save magazine - 3,\nto load magazine - 4,\nto exit - 0\nEnter: "};
+	std::string output{"To add new animal - 1,\nto delete element - 2,\nto show magazine - 3,\nto save magazine - 4,\nto load magazine - 5,\nto exit - 0\nEnter: "};
 	while (true)
 	{
 		int answer(checkInput<int>(output));
-		if (answer >= Actions::EXIT && answer <= Actions::LOAD)
+		if (answer >= Actions::EXIT && answer <= Actions::ACTIONS_SIZE)
 			return answer;
 		std::cout << "Error, try again!\n";
 	}
@@ -117,12 +122,13 @@ void saveToFile(std::fstream&file,const std::string& path, const ZooMagazine&zm)
 {
 	try
 	{
-		file.open(path, std::fstream::out | std::fstream::app);
+		file.open(path, std::fstream::out);
 
 	}
 	catch (const std::exception& ex)
 	{
 		std::cout << "Error in openning file to save, " << ex.what() << std::endl;
+		file.open(path, std::fstream::out | std::fstream::app);
 	}
 
 	file << zm << '\n';
@@ -159,5 +165,26 @@ void loadFromFile(std::fstream& file, const std::string& path, ZooMagazine& zm)
 	catch (const std::exception& ex)
 	{
 		std::cout << "Error of closing file to load, " << ex.what() << std::endl;
+	}
+}
+
+void printMagazine(const ZooMagazine& zm)
+{
+	std::cout << '\n' << zm << std::endl;
+}
+
+void deleteAnimal(ZooMagazine& zm)
+{
+	printMagazine(zm);
+	while (true)
+	{
+		int index(checkInput<int>("Enter index of element need to delete: "));
+		if (index >= 0 && index < zm.getSize())
+		{
+			zm.deleteAnimal(index);
+			break;
+		}
+		else
+			std::cout << "Error, try again!\n";
 	}
 }

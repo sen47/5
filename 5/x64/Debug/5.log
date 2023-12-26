@@ -1,2 +1,7 @@
-﻿  ZooMagazine.cpp
+﻿  Main.cpp
+C:\Projects_VS\Exersise\CppStudio\4_Hard\5\5\ZooMagazine.h(48,41): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  ZooMagazine.cpp
+C:\Projects_VS\Exersise\CppStudio\4_Hard\5\5\ZooMagazine.h(48,41): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Projects_VS\Exersise\CppStudio\4_Hard\5\5\ZooMagazine.cpp(90,30): warning C4101: 'ex': unreferenced local variable
+  Generating Code...
   5.vcxproj -> C:\Projects_VS\Exersise\CppStudio\4_Hard\5\x64\Debug\5.exe

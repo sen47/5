@@ -8,7 +8,7 @@
 #include<algorithm>
 
 enum Sex { MALE = 1, FEMALE };
-enum Param { KIND, NAME, AGE, SEX, PRICE, SIZE };
+enum Param { KIND, NAME, AGE, SEX, PRICE, PARAM_SIZE };
 
 struct Animal
 {
@@ -43,5 +43,7 @@ public:
 
 	void addAnimal(const std::string& kind, const std::string& name, const int age, const Sex sex, const double price);
 	void addAnimal(const Animal& animal);
+	void deleteAnimal(const int index);
 	void loadFromFile(std::fstream& file);
+	int getSize() { return zooMagazine.size(); }
 };

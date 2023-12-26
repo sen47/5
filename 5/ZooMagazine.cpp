@@ -47,7 +47,7 @@ std::istream& operator>>(std::istream& is, ZooMagazine& zm)
 
 bool Animal::operator==(const Animal& other)
 {
-	return this->m_kind == other.m_kind && this->m_name == other.m_name && this->m_age == other.m_age && this->m_sex == other.m_sex && this->m_price == other.m_price;
+	return (this->m_kind == other.m_kind) && (this->m_name == other.m_name) && (this->m_age == other.m_age) && (this->m_sex == other.m_sex) && (this->m_price == other.m_price);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Public
@@ -62,12 +62,18 @@ ZooMagazine::ZooMagazine(const std::string& kind, const std::string& name, const
 
 void ZooMagazine::addAnimal(const std::string& kind, const std::string& name, const int age, const Sex sex, const double price)
 {
-	zooMagazine.push_back(Animal(kind, name, age, sex, price));
+	this->addAnimal(Animal(kind, name, age, sex, price));
 }
 
 void ZooMagazine::addAnimal(const Animal& animal)
 {
-	zooMagazine.push_back(animal);
+	if (!zooMagazine.size() || std::find(zooMagazine.begin(), zooMagazine.end(), animal) == zooMagazine.end())
+		zooMagazine.push_back(animal);
+}
+
+void ZooMagazine::deleteAnimal(const int index)
+{
+	zooMagazine.erase(zooMagazine.begin() + index);
 }
 
 void ZooMagazine::loadFromFile(std::fstream& file)
@@ -77,9 +83,16 @@ void ZooMagazine::loadFromFile(std::fstream& file)
 	
 	while (!file.eof())
 	{
-		std::getline(file, bufer);
+		try
+		{
+			std::getline(file, bufer);
+		}
+		catch(const std::exception&ex)
+		{
+			//std::cout << "Error of reading from file, " << ex.what() << std::endl;
+		}
 
-		if (bufer != "\n")
+		if (bufer.size() && bufer != "\n")
 		{
 			for (int i = 0; i < bufer.size(); ++i)
 			{
@@ -102,15 +115,12 @@ void ZooMagazine::loadFromFile(std::fstream& file)
 				}
 			}
 		}
-		if (animalInfo.size() == Param::SIZE)
+		if (animalInfo.size() == Param::PARAM_SIZE)
 		{
-			Animal newAnimal(animalInfo[KIND], animalInfo[NAME], std::atoi(animalInfo[AGE].c_str()),
+			Animal animal(animalInfo[KIND], animalInfo[NAME], std::atoi(animalInfo[AGE].c_str()),
 				(animalInfo[SEX] == "male" ? Sex::MALE : Sex::FEMALE), std::stod(animalInfo[PRICE].c_str()));
 
-			if ((!zooMagazine.empty()) || std::find(zooMagazine.begin(), zooMagazine.end(), newAnimal) != zooMagazine.end())
-			{
-				addAnimal(newAnimal);
-			}
+			addAnimal(animal);
 		}
 
 		bufer.clear();
